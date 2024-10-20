@@ -11,6 +11,23 @@ Property Alunos As list Of Treinamento.Data.Aluno [ SqlColumnNumber = 5 ];
 
 Property Curso As Treinamento.Data.Curso [ SqlColumnNumber = 6 ];
 
+Method VerifcaStatus(curso As %String) As %String [ Language = objectscript ]
+{
+ Set statusTurma = ""
+ 
+ Set sql = "SELECT * FROM Treinamento_Data.Turma Where Curso->Nome ='"_curso_"'"
+ Set resultSet = ##class(%ResultSet).%New()
+ set status = resultSet.Prepare(sql)
+ set status = resultSet.Execute()
+ 
+ If resultSet.Next()
+ {
+  Set statusTurma = resultSet.Get("Status")
+ 
+    }
+    Return statusTurma
+}
+
 Storage Default
 {
 <Data name="TurmaDefaultData">
