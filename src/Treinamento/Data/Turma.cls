@@ -28,6 +28,38 @@ Method VerifcaStatus(curso As %String) As %String [ Language = objectscript ]
     Return statusTurma
 }
 
+Method ImprimeTurma(curso As %String) As %String [ Language = objectscript ]
+{
+ Set tSC=$$$OK
+ 
+ Try
+ {
+ 	Set sql = "SELECT * FROM Treinamento_Data.Turma Where Curso->Nome ='"_curso_"'"
+ 	Set resultSet = ##class(%SQL.Statement).%New()
+ 	set status = resultSet.%Prepare(sql)
+ 	set status = resultSet.%Execute()
+ 	If resultSet.Next()
+ 	{
+	 	Set idTurma=resultSet.Get("ID")
+	 	Set turma=##class(Treinamento.Data.Turma).%OpenId(idTurma)
+	}
+	For x=1:1:turma.Alunos.Count()
+	{
+		Set aluno=turma.Alunos.GetAt(x)
+		Write "Nome: "_aluno.Nome," Matricula: "_aluno.Matricula_" Idade: "_aluno.Idade
+	}
+	
+		 
+ }
+ Catch(exception)
+ {
+	Set tSC=exception.AsStatus()
+	Set tSC= $SYSTEM.Status.GetErrorText(tSC)
+	Throw exception	 
+ }
+ Return
+}
+
 Storage Default
 {
 <Data name="TurmaDefaultData">
