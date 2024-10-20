@@ -1,0 +1,49 @@
+ROUTINE ExercicioObjeto
+ExercicioObjeto
+Curso
+ Kill ^Treinamento.Data.CursoD
+ 
+ Set curso=##class(Treinamento.Data.Curso).%New()
+ Set curso.Nome= "OBJ IRIS"
+ Set curso.Preco=123456.90
+ Set curso.Duracao=12
+ Set Status= curso.%Save()
+ 
+ 
+ 
+Aluno 
+ ;Kill ^Treinamento.Data.AlunoD
+ For i=1:1:3{
+ Write !,"Nome "
+ Read !,Nome
+ Write !,"Matricula "
+ Read !,Matricula
+ Write !,"Idade "
+ Read !,Idade
+ Set aluno=##class(Treinamento.Data.Aluno).%New()
+ Set aluno.Nome=Nome
+ Set aluno.Matricula=Matricula
+ Set aluno.Idade=Idade
+ Set Status=aluno.%Save()
+ }
+ 
+Instrutor
+ Set instrutor=##class(Treinamento.Data.Instrutor).%New()
+ Set instrutor.Nome= "Anderson"
+ Set instrutor.Matricula=52
+ Set Status=instrutor.%Save()
+ 
+Turma
+ Kill ^Treinamento.Data.TurmaD
+ Set listaAlunos=##class(%ListOfDataTypes).%New()
+ do listaAlunos.Insert(##class(Treinamento.Data.Aluno).%OpenId(1))
+ do listaAlunos.Insert(##class(Treinamento.Data.Aluno).%OpenId(2))
+ do listaAlunos.Insert(##class(Treinamento.Data.Aluno).%OpenId(3))
+ 
+ Set turma=##class(Treinamento.Data.Turma).%New()
+ Set turma.Instrutor=##class(Treinamento.Data.Instrutor).%OpenId(1)
+ Set turma.DataInicio=""
+ Set turma.Curso=##class(Treinamento.Data.Curso).%OpenId(1)
+ Set turma.Status="Incompleto"
+ Set turma.Alunos=listaAlunos
+ Set Status=turma.%Save()
